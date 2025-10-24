@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td>№</td>
+                <td>Зустріч з</td>
+                <td>Дата зустрічі</td>
+                <td>Час зустрічі</td>
+                <td>Тема зустрічі</td>
+                <td>Адреса</td>
+                <td>Meet/Zoom</td>
+                <td>Прийнята</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for planner in planners %}
+            <tr>
+                <th>{{ planner.id }}</th>
+                <td>{{ planner.contact }}</td>
+                <td>{{ planner.date }}</td>
+                <td>{{ planner.time }}</td>
+                <td>{{ planner.title }}</td>
+                <td>{{ planner.address }}</td>
+                <td><a href="{{ planner.link }}">{{ planner.link }}</a></td>
+                <td>
+                    {% if planner.accepted == False %}
+                    <input type="checkbox" disabled>
+                    {% elif planner.accepted %}
+                    <input type="checkbox" disabled checked>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

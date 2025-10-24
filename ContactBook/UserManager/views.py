@@ -1,8 +1,11 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from django.contrib import messages
+from django.http import HttpRequest, HttpResponseForbidden
 
+
+from .models import MySuperUser
 from .forms import SignUpForm,LoginForm
 
 # Create your views here.
@@ -47,10 +50,16 @@ def index(request):
     return render(request=request,template_name="index.html")
 
 
-@login_required(login_url="/sign_in/")
+@login_required(login_url="/logout/")
 def logout_func(request):
-    if request.method == "POST":
-        logout(request)
-        messages.success(request, "Ви успішно вийшли!")
-        return redirect("index")
+    logout(request)
+    messages.success(request, "Ви успішно вийшли!")
+    return redirect("index")
 
+
+# @permission_required(["UserManager.view_mysuperuser"],raise_exception=True)
+def get_users(request: HttpRequest):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+    users = MySuperUser.objects.all()
+    return render(request, "admin.html", dict(users=users))

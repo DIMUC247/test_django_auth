@@ -1,13 +1,19 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+from django.http import HttpRequest
 
 from .forms import ContactForm
 from .models import Contact
-from ContactBook.settings import LOGIN_URL
+
+
 
 # Create your views here.
 
+
+@permission_required(["PhoneBook.add_contact"])
 @login_required
 def add_contact(request):
     form = ContactForm()
@@ -23,7 +29,11 @@ def add_contact(request):
     return render(request=request,template_name="add_contact.html",context=dict(form=form))
 
 @login_required
-def get_contacts(request):
+def get_contacts(request: HttpRequest):
+    
+    permission = Permission.objects.get(codename="add_contact")
+    request.user.user_permissions.add(permission)
+
     contacts = Contact.objects.filter(user=request.user).all()
     return render(request=request,template_name="contacts.html",context=dict(contacts=contacts))
 

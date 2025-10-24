@@ -11,7 +11,7 @@ class Planner(models.Model):
     time = models.TimeField()
     address = models.CharField(max_length=300,null=True,blank=True,default="ONLINE")
     link = models.URLField(null=True,blank=True,default=None)
-    accepted = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=None, null=True)
 
     def __str__(self):
-        return self.title
+        return f"Зустріч '{self.title}' з {self.contact.first_name} {self.contact.last_name} у {self.date} о {self.time}"

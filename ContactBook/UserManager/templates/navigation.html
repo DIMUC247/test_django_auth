@@ -8,12 +8,32 @@
         <li class="nav-item">
             <a class="nav-link active" href="{% url 'get_contacts' %}">Список контактів</a>
         </li>
+
+        {% if perms.PhoneBook.add_contact %}
         <li class="nav-item">
             <a class="nav-link active" href="{% url 'add_contact' %}">Додати контакт</a>
+        </li>
+        {% endif %}
+
+        <li>
+            <a class="nav-link active" href="{% url 'get_add_form' %}">Додати зустріч</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'planners' %}">Зустрічі</a>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'list_view' %}">Зустрічі(class) </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'planners_with_me' %}">Зустрічі зі мною</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" href="{% url 'logout' %}">Вийти</a>
         </li>
+        {% if request.user.is_staff %}
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'get_users' %}">Користувачі</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
         {% else %}
         <li class="nav-item">
